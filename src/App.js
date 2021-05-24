@@ -5,14 +5,14 @@ import RecipeBox from "./RecipeBox";
  
 const App=()=>{
 
-useEffect(
-  ()=>{
+useEffect(()=>{
     getRecipes();
-  },[]
-);
+  },[]);
+
 const [search,setSearch] = useState("");
 const [recipes,setRecipes] = useState([]);
 const [label,setLabel] = useState("vegan");
+const [health,setHealth] = useState([]);
  
 const YOUR_APP_ID = '31d17da5';
 const YOUR_APP_KEY = '4fc0a8c2806c257074c0430e022c2634';
@@ -24,7 +24,9 @@ async function getRecipes(){
   const result = await Axios.get(url);
 
   console.log(result);
+  console.log(result.data.hits[0]["recipe"]["healthLabels"]);
   setRecipes(result.data.hits);
+  setHealth(result.data.hits[0]["recipe"]["healthLabels"]);
   
   console.log(result.data.hits);
 
@@ -64,7 +66,7 @@ return(
 
  <select className="health_labels">
 
- <option onClick={(e)=>setLabel("vegan")}>Vegan</option>
+ {/* <option onClick={(e)=>setLabel("vegan")}>Vegan</option>
  <option onClick={(e)=>setLabel("vegetarian")}>Vegetarian</option>
  <option onClick={(e)=>setLabel("paleo")}>Paleo</option>
  <option onClick={(e)=>setLabel("dairy-free")}>Dairy-free</option>
@@ -78,7 +80,14 @@ return(
  <option onClick={(e)=>setLabel("soy-free")}>Soy-free</option>
  <option onClick={(e)=>setLabel("shellfish-free")}>Shellfish-free</option>
  <option onClick={(e)=>setLabel("fish-free")}>Fish-free</option>
- <option onClick={(e)=>setLabel("low fat")}>Low fat</option> 
+ <option onClick={(e)=>setLabel("low fat")}>Low fat</option>  */
+ 
+ health.map((data)=>{
+
+ return <option onClick={(e)=>setLabel({data})}>{data}</option>
+
+ })
+ }
  
  </select>
  </form>
